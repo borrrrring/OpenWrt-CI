@@ -1,4 +1,4 @@
-name: Acrh17
+name: N1
 
 on:
   repository_dispatch:
@@ -15,15 +15,15 @@ env:
   REPO_URL: https://github.com/coolsnowwolf/lede
   REPO_BRANCH: master
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: acrh17.config
-  DIY_P1_SH: acrh17.sh
+  CONFIG_FILE: N1.config
+  DIY_P1_SH: N1.sh
   DIY_P2_SH: diy-part2.sh
   SSH_ACTIONS: false
   UPLOAD_BIN_DIR: true
   UPLOAD_FIRMWARE: false
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
-  UPLOAD_RELEASE: false
+  UPLOAD_RELEASE: true
   TZ: Asia/Shanghai
 
 jobs:
