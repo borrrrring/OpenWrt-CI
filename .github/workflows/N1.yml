@@ -24,6 +24,12 @@ env:
   UPLOAD_COWTRANSFER: false
   UPLOAD_WETRANSFER: false
   UPLOAD_RELEASE: true
+  DELETE_RELEASE: true
+  DELETE_ARTIFACTS: true
+  KEEP_DAY: 3
+  KEEP_MININUM_RUNS: 0
+  KEEP_MININUM_RELEASE: 3
+  RECENT_LASTEST: 3
   TZ: Asia/Shanghai
 
 jobs:
@@ -122,7 +128,8 @@ jobs:
         echo "FIRMWARE=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"
         
-    - name: Build OpenWrt for Amlogic S9xxx STB
+    - name: Build OpenWrt for Phicomm-N1
+      if: steps.compile.outputs.status == 'success' && env.UPLOAD_FIRMWARE == 'true' && !cancelled()
       id: build
       run: |
         git clone --depth 1 https://github.com/ophub/amlogic-s9xxx-openwrt.git
@@ -132,68 +139,41 @@ jobs:
         sudo rm -rf ../openwrt && sync
         sudo rm -rf /workdir && sync
         sudo chmod +x make
-        sudo ./make -d -b s905x3_s905x2_s905x_s905d_s922x_s912 -k 5.4.105_5.4.77_5.4.50
+        sudo ./make -d -b s905d -k 5.10.23.TF_5.4.105_5.4.77_5.4.50
         cd out/ && sudo gzip *.img
         cp -f ../openwrt-armvirt/*.tar.gz . && sync
         echo "FILEPATH=$PWD" >> $GITHUB_ENV
         echo "::set-output name=status::success"    
     
-    - name: Upload firmware directory
-      uses: actions/upload-artifact@main
-      if: steps.organize.outputs.status == 'success' && !cancelled()
-      with:
-        name: OpenWrt_firmware${{ env.DEVICE_NAME }}${{ env.FILE_DATE }}
-        path: ${{ env.FIRMWARE }}
-
-    - name: Upload firmware to cowtransfer
-      id: cowtransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_COWTRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer cow --block 2621440 -s -p 64 --no-progress ${FIRMWARE} 2>&1 | tee cowtransfer.log
-        echo "::warning file=cowtransfer.com::$(cat cowtransfer.log | grep https)"
-                 echo "::set-output name=url::$(cat cowtransfer.log | grep https | cut -f3 -d" ")"
-    
-    - name: Upload firmware to WeTransfer
-      id: wetransfer
-      if: steps.organize.outputs.status == 'success' && env.UPLOAD_WETRANSFER == 'true' && !cancelled()
-      run: |
-        curl -fsSL git.io/file-transfer | sh
-        ./transfer wet -s -p 16 --no-progress ${FIRMWARE} 2>&1 | tee wetransfer.log
-        echo "::warning file=wetransfer.com::$(cat wetransfer.log | grep https)"
-                        echo "::set-output name=url::$(cat wetransfer.log | grep https | cut -f3 -d" ")"
-    
-    - name: Generate release tag
-      id: tag
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      run: |
-        echo "::set-output name=release_tag::$(date +"%Y.%m.%d-%H%M").${{ env.IMAGE_VERSION }}"
-        touch release.txt
-        [ $UPLOAD_COWTRANSFER = true ] && echo "🔗 [Cowtransfer](${{ steps.cowtransfer.outputs.url }})" >> release.txt
-        [ $UPLOAD_WETRANSFER = true ] && echo "🔗 [WeTransfer](${{ steps.wetransfer.outputs.url }})" >> release.txt
-        echo "::set-output name=status::success"
-    
-    - name: Upload firmware to release
+    - name: Upload OpenWrt Firmware to Release
       uses: softprops/action-gh-release@v1
-      if: steps.tag.outputs.status == 'success' && !cancelled()
+      if: steps.build.outputs.status == 'success' && env.UPLOAD_RELEASE == 'true' && !cancelled()
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        tag_name: ${{ steps.tag.outputs.release_tag }}
-        body_path: release.txt
-        files: ${{ env.FIRMWARE }}/*
-
-    - name: Delete workflow runs
-      uses: GitRML/delete-workflow-runs@main
+        tag_name: openwrt_phicomm-n1_${{ env.FILE_DATE }}
+        files: ${{ env.FILEPATH }}/*
+        body: |
+          This is OpenWrt firmware for Phicomm-N1
+          * Firmware information
+          Default IP: 192.168.1.1
+          Default username: root
+          Default password: password
+          
+    - name: Delete older releases
+      uses: dev-drprasad/delete-older-releases@master
+      if: env.DELETE_RELEASE == 'true'
       with:
-        retain_days: 15
-        keep_minimum_runs: 3
-
-    - name: Remove old Releases
-      uses: dev-drprasad/delete-older-releases@v0.1.0
-      if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-      with:
-        keep_latest: 3
+        keep_latest: ${{ env.KEEP_MININUM_RELEASE }}
         delete_tags: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Delete older workflow runs and artifacts
+      uses: Mattraks/delete-workflow-runs@main
+      if: env.DELETE_ARTIFACTS == 'true'
+      with:
+        token: ${{ secrets.GITHUB_TOKEN }}
+        repository: ${{ github.repository }}
+        retain_days: ${{ env.KEEP_DAY }}
+        keep_minimum_runs: ${{ env.KEEP_MININUM_RUNS }}          
