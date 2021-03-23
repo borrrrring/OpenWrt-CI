@@ -65,6 +65,25 @@ git clone https://github.com/jerrykuku/luci-app-jd-dailybonus.git package/luci-a
 # 设置密码为空（安装固件时无需密码登陆，然后自己修改想要的密码）
 sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz-default-settings
 
+#sed -i "/uci commit fstab/a\uci commit network" $ZZZ
+#sed -i "/uci commit network/i\uci set network.lan.ipaddr='192.168.2.2'" $ZZZ              # IPv4 地址(openwrt后台地址)
+#sed -i "/uci commit network/i\uci set network.lan.netmask='255.255.255.0'" $ZZZ           # IPv4 子网掩码
+#sed -i "/uci commit network/i\uci set network.lan.gateway='192.168.2.1'" $ZZZ             # IPv4 网关
+#sed -i "/uci commit network/i\uci set network.lan.broadcast='192.168.2.255'" $ZZZ         # IPv4 广播
+#sed -i "/uci commit network/i\uci set network.lan.dns='223.5.5.5 114.114.114.114'" $ZZZ   # DNS(多个DNS要用空格分开)
+#sed -i "/uci commit network/i\uci set network.lan.delegate='0'" $ZZZ                      # 去掉LAN口使用内置的 IPv6 管理
+
+#sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile   # 强制选择argon为默认主题选项
+#sed -i "/uci commit luci/i\uci set luci.main.mediaurlbase=/luci-static/argon" $ZZZ        # 选择argon为默认主题
+
+#sed -i "/uci commit system/i\uci set system.@system[0].hostname='OpenWrt-123'" $ZZZ       # 修改主机名称为OpenWrt-123
+
+#sed -i "s/OpenWrt /281677160 build $(TZ=UTC-8 date "+%Y.%m.%d") @ OpenWrt /g" $ZZZ        # 增加自己个性名称281677160
+
+#sed -i '/CYXluq4wUazHjmCDBCqXF/d' $ZZZ                                                    # 设置密码为空
+
+#sed -i 's/PATCHVER:=5.4/PATCHVER:=4.19/g' target/linux/x86/Makefile                      # 修改内核版本为4.19
+
 # 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
 #sed -i 's/"BaiduPCS Web"/"百度网盘"/g' package/lean/luci-app-baidupcs-web/luasrc/controller/baidupcs-web.lua
 #sed -i 's/cbi("qbittorrent"),_("qBittorrent")/cbi("qbittorrent"),_("BT下载")/g' package/lean/luci-app-qbittorrent/luasrc/controller/qbittorrent.lua
