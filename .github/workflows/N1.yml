@@ -49,7 +49,7 @@ jobs:
 
       - name: Load config
         run: |
-          [ -e ./.config ] && cp ./.config ./openwrt/
+          [ -e ./N1.config ] && cp ./N1.config ./openwrt/
           chmod +x ./custom.sh
           cd openwrt
           $GITHUB_WORKSPACE/custom.sh
