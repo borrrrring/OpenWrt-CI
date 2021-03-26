@@ -12,7 +12,7 @@ on:
   #  - cron: 0 8 * * 5
 
 env:
-  OPENWRT_URL: https://github.com/coolsnowwolf/lede.git
+  OPENWRT_URL: https://github.com/coolsnowwolf/lede
   OPENWRT_BRANCH: master
   TZ: Asia/Shanghai
 
