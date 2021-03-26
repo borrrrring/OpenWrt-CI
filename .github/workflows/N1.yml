@@ -31,13 +31,16 @@ jobs:
           sudo -E apt-get -qq autoremove --purge
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "$TZ"
+      
       - name: Clone OpenWrt and tuanqing/mknop
         run: |
           git clone --depth 1 -b "$OPENWRT_BRANCH" "$OPENWRT_URL" ./openwrt
           git clone --depth 1 https://github.com/tuanqing/mknop.git
+      
       - name: Copy feeds.conf.default
         run: |
           [ -e ./feeds.conf.default ] && cp ./feeds.conf.default ./openwrt/
+      
       - name: Update and install feeds
         run: cd ./openwrt/ && ./scripts/feeds update -a && ./scripts/feeds install -a
 
@@ -50,6 +53,7 @@ jobs:
           chmod +x ./custom.sh
           cd openwrt
           $GITHUB_WORKSPACE/custom.sh
+      
       - name: Connect to Actions via SSH
         uses: P3TERX/ssh2actions@v1.0.0
         if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh != 'false') || contains(github.event.action, 'ssh')
@@ -62,11 +66,13 @@ jobs:
           cd ./openwrt/
           make defconfig
           make -j8 download
+      
       - name: Make OpenWrt
         run: |
           echo "$(nproc) processing units available"
           cd ./openwrt/
           make -j$(nproc) || make -j1 || make -j1 V=s
+      
       - name: Build image
         run: |
           cp ./openwrt/bin/targets/*/*/*.tar.gz ./mknop/openwrt/
@@ -74,12 +80,14 @@ jobs:
           sudo ./gen_openwrt -d -k latest -m phicomm-n1
           du -h ./out/phicomm-n1/*.img
           gzip ./out/phicomm-n1/*.img
+      
       - name: Prepare for uploading artifact
         run: |
           echo "ARTIFACT_NAME=openwrt-phicomm-n1-$(date -I)" >> $GITHUB_ENV
           cp ./openwrt/.config ./mknop/out/phicomm-n1/
           cd ./mknop/out/phicomm-n1/
           openssl dgst -sha256 ./*
+      
       - name: Upload artifact
         uses: actions/upload-artifact@main
         with:
