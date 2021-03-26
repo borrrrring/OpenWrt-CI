@@ -33,7 +33,7 @@ sed -i 's@.*CYXluq4wUazHjmCDBCqXF*@#&@g' package/lean/default-settings/files/zzz
 #git clone https://github.com/destan19/OpenAppFilter.git package/luci-app-oaf
 #svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/luci-app-gost package/lean/luci-app-gost
 #svn co https://github.com/project-openwrt/openwrt/trunk/package/ctcgfw/gost package/lean/gost
-#git clone https://github.com/8688Add/luci-theme-infinityfreedom.git package/luci-theme-infinityfreedom
+svn co https://github.com/xiaoqingfengATGH/luci-theme-infinityfreedom/trunk/luci-theme-infinityfreedom package/luci-theme-infinityfreedom
 #git clone https://github.com/8688Add/luci-theme-opentomato.git package/luci-theme-opentomato
 #git clone https://github.com/bin20088/luci-app-koolddns.git package/luci-app-koolddns
 #rm -rf package/lean/luci-theme-argon
