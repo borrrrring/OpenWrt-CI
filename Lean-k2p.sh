@@ -10,7 +10,7 @@ sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 #git clone https://github.com/jerrykuku/luci-app-vssr.git package/luci-app-vssr
 #git clone https://github.com/jerrykuku/lua-maxminddb.git package/lua-maxminddb
 #rm -rf package/lean/xray
-#svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray package/lean/xray
+svn co https://github.com/xiaorouji/openwrt-passwall/trunk/xray-core package/xray-core
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/luci-app-passwall package/luci-app-passwall
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/brook package/brook
 #svn co https://github.com/xiaorouji/openwrt-passwall/trunk/trojan-go package/trojan-go
