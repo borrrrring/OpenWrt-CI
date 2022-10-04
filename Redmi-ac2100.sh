@@ -29,7 +29,7 @@ git clone https://github.com/8688Add/luci-app-frpc-mod.git package/lean/luci-app
 chmod 0755 package/lean/luci-app-frpc/root/etc/init.d/frp
 rm -rf package/lean/luci-app-unblockmusic
 svn co https://github.com/project-openwrt/openwrt/trunk/package/lean/luci-app-unblockmusic package/lean/luci-app-unblockmusic
-#svn co https://github.com/fw876/helloworld/trunk/luci-app-ssr-plus package/lean/luci-app-ssr-plus
+svn co https://github.com/fw876/helloworld/tree/master/luci-app-ssr-plus package/lean/luci-app-ssr-plus
 #svn co https://github.com/fw876/helloworld/trunk/tcping package/lean/tcping
 
 # 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
