@@ -30,7 +30,7 @@ sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 #rm -rf package/lean/luci-app-unblockmusic
 #//github.com/project-openwrt/openwrt/trunk/package/lean/luci-app-unblockmusic package/lean/luci-app-unblockmusic
 git clone https://github.com/fw876/helloworld.git hello 
-mv hello/luci-app-ssr-plusluci-app-ssr-plus package/lean/luci-app-ssr-plus
+mv hello/luci-app-ssr-plus package/lean/luci-app-ssr-plus
 #svn co https://github.com/fw876/helloworld/trunk/tcping package/lean/tcping
  
 # 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
