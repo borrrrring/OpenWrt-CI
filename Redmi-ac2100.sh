@@ -32,7 +32,7 @@ sed -i 's/^#\(.*helloworld\)/\1/' feeds.conf.default
 git clone https://github.com/fw876/helloworld.git hello 
 mv hello/luci-app-ssr-plusluci-app-ssr-plus package/lean/luci-app-ssr-plus
 #svn co https://github.com/fw876/helloworld/trunk/tcping package/lean/tcping
-
+ 
 # 修改插件名字（修改名字后不知道会不会对插件功能有影响，自己多测试）
 #sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' package/lean/luci-app-flowoffload/po/zh-cn/flowoffload.po
 #sed -i 's/"Turbo ACC 网络加速"/"网络加速"/g' package/lean/luci-app-sfe/po/zh-cn/sfe.po
